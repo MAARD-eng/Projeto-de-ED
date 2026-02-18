@@ -173,31 +173,94 @@ void portal_aluno(Turma *lt) {
     }
 }
 
+/* Exibe as disciplinas do aluno para ajudar na digitacao */
+static void listar_disciplinas_aluno(Aluno *a) {
+    if (!a) return;
+    printf("Disciplinas disponíveis:\n");
+    Disciplina *d = a->lista_disciplinas;
+    int n = 1;
+    while (d) { printf("  %d. %s\n", n++, d->nome); d = d->proximo; }
+}
+
 void portal_docente(Turma *lt, Pilha *seguranca) {
+    if (!lt) {
+        printf("\n[AVISO] Nenhuma turma cadastrada. Use o Portal da Coordenacao.\n");
+        return;
+    }
+
     int sub_op;
-    printf("\n1. Lancar Nota\n2. Desfazer Ultima Acao (Undo)\n0. Voltar\nEscolha: ");
-    scanf("%d", &sub_op);
+    printf("\n========================================\n");
+    printf("    PORTAL DO DOCENTE — KOLPING          \n");
+    printf("    Turma: %-10s | %d aluno(s)      \n", lt->codigo, lt->qtd_atual);
+    printf("========================================\n");
+    printf("1. Lancar Nota\n");
+    printf("2. Alterar Nota existente\n");
+    printf("3. Remover Nota (Zerar)\n");
+    printf("4. Consultar Notas de um Aluno\n");
+    printf("5. Desfazer Ultima Alteracao de Nota\n");
+    printf("6. Gerar Relatorio Final (Fechamento)\n");
+    printf("0. Voltar\n");
+    printf("----------------------------------------\n");
+    printf("Escolha: ");
 
-    if (sub_op == 1 && lt) {
-        char mat[20], materia[50];
-        int unidade, prova;
-        float nota;
-        
-        printf("Matricula: "); scanf("%s", mat);
-        printf("Materia: "); scanf("%s", materia);
-        printf("Unidade (1-4): "); scanf("%d", &unidade);
-        printf("Prova (1-2): "); scanf("%d", &prova);
-        printf("Nota: "); scanf("%f", &nota);
+    if (scanf("%d", &sub_op) != 1) { limpar_buffer(); return; }
+    limpar_buffer();
 
+    if (sub_op == 1) {
+        char mat[20], materia[50]; int u, p; float nota;
+        printf("\n--- LANCAR NOTA ---\n");
+        printf("Matricula: "); scanf("%s", mat); limpar_buffer();
         Aluno *a = buscar_aluno(lt->lista_alunos, mat);
-        if (a) {
-            salvar_acao(seguranca, "nota", a); 
-            lancar_nota(lt->lista_alunos, mat, materia, unidade, prova, nota);
-            printf("Nota lancada com sucesso!\n");
-        }
-    } 
-    else if (sub_op == 2) {
-        desfazer(seguranca);
+        if (!a) { printf("[ERRO] Aluno nao encontrado.\n"); return; }
+        listar_disciplinas_aluno(a);
+        printf("Disciplina: "); scanf(" %[^\n]", materia);
+        printf("Unidade (1-4): "); scanf("%d", &u);
+        printf("Prova (1-2): ");   scanf("%d", &p);
+        printf("Nota (0-10): ");   scanf("%f", &nota); limpar_buffer();
+        lancar_nota_validada(lt->lista_alunos, seguranca, mat, materia, u, p, nota);
+
+    } else if (sub_op == 2) {
+        char mat[20], materia[50]; int u, p; float nota;
+        printf("\n--- ALTERAR NOTA ---\n");
+        printf("Matricula: "); scanf("%s", mat); limpar_buffer();
+        Aluno *a = buscar_aluno(lt->lista_alunos, mat);
+        if (!a) { printf("[ERRO] Aluno nao encontrado.\n"); return; }
+        consultar_notas_aluno(lt->lista_alunos, mat);
+        listar_disciplinas_aluno(a);
+        printf("Disciplina: ");       scanf(" %[^\n]", materia);
+        printf("Unidade (1-4): ");    scanf("%d", &u);
+        printf("Prova (1-2): ");      scanf("%d", &p);
+        printf("Nova nota (0-10): "); scanf("%f", &nota); limpar_buffer();
+        alterar_nota(lt->lista_alunos, seguranca, mat, materia, u, p, nota);
+
+    } else if (sub_op == 3) {
+        char mat[20], materia[50]; int u, p;
+        printf("\n--- REMOVER NOTA (ZERAR) ---\n");
+        printf("Matricula: "); scanf("%s", mat); limpar_buffer();
+        Aluno *a = buscar_aluno(lt->lista_alunos, mat);
+        if (!a) { printf("[ERRO] Aluno nao encontrado.\n"); return; }
+        listar_disciplinas_aluno(a);
+        printf("Disciplina: ");    scanf(" %[^\n]", materia);
+        printf("Unidade (1-4): "); scanf("%d", &u);
+        printf("Prova (1-2): ");   scanf("%d", &p); limpar_buffer();
+        remover_nota(lt->lista_alunos, seguranca, mat, materia, u, p);
+
+    } else if (sub_op == 4) {
+        char mat[20];
+        printf("\n--- CONSULTAR NOTAS ---\n");
+        printf("Matricula: "); scanf("%s", mat); limpar_buffer();
+        consultar_notas_aluno(lt->lista_alunos, mat);
+
+    } else if (sub_op == 5) {
+        printf("\n--- DESFAZER ULTIMA ALTERACAO DE NOTA ---\n");
+        desfazer_nota(seguranca);
+
+    } else if (sub_op == 6) {
+        printf("\n--- FECHAMENTO / RELATORIO FINAL ---\n");
+        gerar_relatorio_final(lt);
+
+    } else if (sub_op == 0) {
+        voltar_menu();
     }
 }
 
