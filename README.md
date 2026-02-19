@@ -6,25 +6,19 @@ O **MAARD-eng** é uma solução robusta desenvolvida em C para o gerenciamento 
 
 ## 🏗️ Arquitetura do Sistema e Engenharia de Dados
 
-O software foi projetado sobre quatro pilares da Engenharia de Computação para garantir uma manipulação eficiente da memória Heap do seu notebook:
+O software foi projetado sobre quatro pilares da Engenharia de Computação para garantir uma manipulação eficiente da memória Heap do seu notebook Acer:
 
 ### 1. Listas Encadeadas (Gerenciamento Global e Local)
 * **Professores**: Uma lista encadeada simples que armazena o corpo docente global, permitindo inserções e buscas dinâmicas.
 * **Alunos e Disciplinas**: Uma estrutura hierárquica onde cada nó "Aluno" contém o início de uma lista secundária de "Disciplinas", permitindo que cada estudante tenha sua grade curricular alocada dinamicamente conforme sua série.
 
-
-
 ### 2. Fila Dinâmica (Controle de Transbordo)
 * **Comportamento FIFO**: Utilizada quando uma turma atinge o limite máximo de vagas, movendo novos registros para um estado de espera.
 * **Otimização $O(1)$**: A estrutura `FilaEspera` utiliza ponteiros para `inicio` e `fim`, garantindo que a inserção e a remoção ocorram em tempo constante.
 
-
-
 ### 3. Pilha de Segurança (Sistema de Undo)
 * **Snapshot de Memória**: Antes de qualquer alteração de nota ou remoção, o sistema empilha um nó de `Acao` na pilha de segurança.
 * **Recuperação de Estado**: Caso ocorra um erro de digitação, a função de "Desfazer" recupera o estado anterior diretamente da pilha, restaurando os dados originais.
-
-
 
 ### 4. Gerenciamento de Memória (Heap Engine)
 * **Limpeza em Cascata**: O sistema implementa um motor de encerramento (`encerrar_sistema`) que percorre todas as estruturas (Turmas, Professores, Alunos e Filas) para garantir a liberação completa de memória e evitar *memory leaks*.
@@ -40,18 +34,34 @@ O software foi projetado sobre quatro pilares da Engenharia de Computação para
 
 ---
 
-## 🛠️ Instruções de Compilação e Execução
+## 🛠️ Guia de Compilação: Sistema Escolar Kolping
 
-Para atender aos requisitos de entrega do projeto, utilize o compilador `gcc` seguindo os comandos abaixo no seu terminal:
+Siga as etapas abaixo para garantir a correta integração dos arquivos `.c` e `.h` no seu ambiente de desenvolvimento:
 
 ### 1. Pré-requisitos
-Certifique-se de que os arquivos de código fonte (`.c`) e os cabeçalhos (`.h`) estejam localizados no mesmo diretório.
+* **Compilador**: GCC (GNU Compiler Collection) ou qualquer compilador compatível com o padrão C99.
+* **Arquivos**: Certifique-se de que os arquivos `main.c` e `projeto_escola.h` estejam no mesmo diretório de trabalho.
 
 ### 2. Comando de Compilação
-Abra o terminal e execute: `gcc main.c -o sistema_kolping`
+Abra o terminal ou prompt de comando e execute o seguinte comando:
+`gcc main.c -o sistema_kolping`
 
-### 3. Comando de Execução
-Inicie o sistema com o comando: `./sistema_kolping`
+**Dica de Engenharia**: Para verificar avisos de segurança e boas práticas de código durante a compilação, utilize a flag `-Wall`:
+`gcc -Wall main.c -o sistema_kolping`
+
+### 3. Instruções de Execução
+Após a geração do executável, utilize o comando correspondente ao seu sistema operacional:
+
+**Windows**:
+`sistema_kolping.exe`
+
+**Linux / macOS**:
+`./sistema_kolping`
+
+### 4. Observações Importantes
+* **Gestão de Memória**: O sistema utiliza alocação dinâmica (Heap) para gerenciar as listas encadeadas de alunos, professores e turmas.
+* **Encerramento Seguro**: Utilize sempre a **Opção 0** no menu principal para sair. Isso aciona a função `encerrar_sistema`, que garante a liberação total da memória alocada e evita *memory leaks*.
+* **Integridade de Dados**: O sistema possui proteção contra *dangling pointers*; ao remover um professor, os vínculos nos boletins dos alunos são limpos automaticamente.
 
 ---
 
