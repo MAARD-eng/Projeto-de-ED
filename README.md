@@ -77,4 +77,4 @@ Este projeto foi desenvolvido pelos acadêmicos de Engenharia de Computação:
 * **MATEUS ALVES DE ALMEIDA RODRIGUES DANTAS**
 
 ---
-*Este software é um projeto integrador desenvolvido para a disciplina de Estrutura de Dados I.*
+*Este software é um projeto integrador desenvolvido para a disciplina de Estrutura de Dados.*
