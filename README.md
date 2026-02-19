@@ -40,6 +40,26 @@ O software foi projetado sobre quatro pilares da Engenharia de Computação para
 
 ---
 
+## Guia Técnico: Sistema Escolar Kolping
+
+Este documento detalha os procedimentos de compilação, execução e as diretrizes arquiteturais do sistema de gestão acadêmica desenvolvido em linguagem C.
+
+### 🛠️ 1. Preparação do Ambiente
+Para garantir a compilação correta, os seguintes arquivos devem estar no mesmo diretório de trabalho:
+* **main.c**: Contém o fluxo de controle, menus e a lógica de integração.
+* **projeto_escola.h**: Header contendo as definições de estruturas (Listas Encadeadas, Filas e Pilhas) e as implementações das funções de negócio.
+
+### 💻 2. Instruções de Compilação
+O projeto utiliza o padrão C99 e pode ser compilado via terminal utilizando o **GCC**:
+
+#### Comando Padrão:
+gcc main.c -o sistema_kolping
+
+#### Execução:
+    Windows: sistema_kolping.exe
+
+    Linux/macOS: ./sistema_kolping
+
 ## 👥 Autores (Equipe de Engenharia)
 
 Este projeto foi desenvolvido pelos acadêmicos de Engenharia de Computação:
