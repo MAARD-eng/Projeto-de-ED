@@ -1,33 +1,55 @@
-# Projeto-de-ED
-🏛️ Resumo da Arquitetura: Sistema Escolar Kolping
-1. Identidade e Escopo
-Nome da Instituição: Definimos o nome como Escola Kolping, estabelecendo uma identidade visual nos e-mails institucionais e nos cabeçalhos de relatórios.
+# 🎓 Sistema de Gestão Acadêmica Kolping (MAARD-eng)
 
-Objetivo: Criar uma infraestrutura robusta em C para gerenciar o fluxo administrativo de alunos, professores e turmas.
+O **MAARD-eng** é uma solução robusta desenvolvida em C para o gerenciamento de ecossistemas escolares. O projeto aplica conceitos avançados de **Estruturas de Dados Dinâmicas** para resolver problemas reais de alocação de vagas, histórico de notas e gerenciamento de pessoal, garantindo performance e integridade de memória.
 
-2. Estrutura de Dados (Modelagem)
-Implementamos um sistema de Listas Encadeadas Dinâmicas para garantir que a memória seja usada de forma eficiente:
+## 🏗️ Arquitetura do Sistema e Engenharia de Dados
 
-Lista de Alunos: Cada nó contém dados pessoais, matrícula única e um ponteiro para sua grade curricular específica.
+O software foi projetado sobre quatro pilares da Engenharia de Computação para garantir uma manipulação eficiente da memória Heap:
 
-Lista de Disciplinas: Cada aluno possui sua própria lista de matérias, conectada ao seu cadastro.
+### 1. Listas Encadeadas (Gerenciamento Global e Local)
+* **Professores:** Uma lista encadeada simples que armazena o corpo docente global, permitindo inserções e buscas dinâmicas.
+* **Alunos e Disciplinas:** Uma estrutura hierárquica onde cada nó "Aluno" contém o início de uma lista secundária de "Disciplinas", permitindo que cada estudante tenha sua grade curricular alocada dinamicamente conforme sua série (Fundamental ou Médio).
 
-Lista de Professores: Uma lista global que armazena todos os docentes da instituição, permitindo que eles sejam vinculados a múltiplas disciplinas.
+### 2. Fila Dinâmica (Controle de Transbordo)
+* **Comportamento FIFO:** Utilizada quando uma turma atinge o limite máximo de vagas, movendo novos registros para um estado de espera.
+* **Otimização $O(1)$:** A estrutura `FilaEspera` utiliza ponteiros para `inicio` e `fim`, garantindo que a inserção e a remoção ocorram em tempo constante.
 
-Estrutura de Turmas: Um container que organiza a lotação física (vagas) e associa alunos a um professor regente.
+### 3. Pilha de Segurança (Sistema de Undo)
+* **Snapshot de Memória:** Antes de qualquer alteração de nota ou remoção, o sistema empilha um nó de `Acao`.
+* **Recuperação de Estado:** Caso ocorra um erro de digitação, a função de "Desfazer" recupera o estado anterior diretamente da pilha.
 
-3. Regras de Negócio e Automação
-Grades Predefinidas por Ano: Criamos uma lógica automática onde o sistema identifica a série do aluno e aloca as matérias corretas:
+### 4. Gerenciamento de Memória (Heap Engine)
+* **Limpeza em Cascata:** O sistema implementa um motor de encerramento (`encerrar_sistema`) que percorre todas as estruturas (Turmas, Professores, Alunos e Filas) para garantir a liberação completa de memória, evitando *memory leaks*.
 
-Fundamental (Ex: 6º ano): 8 disciplinas (Português, Matemática, Ciências, etc.).
+---
 
-Ensino Médio (Ex: 1º ano/Série 10): 10 disciplinas (Incluindo Física, Química, Filosofia e Sociologia).
+## 🚀 Funcionalidades Principais
 
-Geração de Identidade Digital: O sistema gera automaticamente e-mails acadêmicos e funcionais baseados no nome e ID do usuário.
+* **Matrícula Automatizada:** Sistema inteligente que promove automaticamente o próximo aluno da fila de espera para a turma assim que uma vaga é aberta.
+* **Portal do Docente:** Interface completa para lançamento, alteração e remoção de notas com validação rigorosa de dados.
+* **Portal da Coordenação:** Gerenciamento centralizado de turmas e cadastro de professores.
+* **Relatório de Fechamento:** Processamento de toda a lista de alunos para gerar estatísticas de desempenho.
 
-4. Segurança e Robustez (O Diferencial do Engenheiro)
-Controle de Vagas: Implementamos uma trava que impede a matrícula em turmas que já atingiram o limite máximo.
+---
 
-Gestão de Memória: Criamos funções de exclusão em cascata (deletar aluno remove também suas notas e matérias).
+## 🛠️ Detalhes de Implementação
 
-Prevenção de Erros (Dangling Pointers): Desenvolvemos uma função que, ao remover um professor, limpa automaticamente todos os vínculos dele nos boletins dos alunos, evitando que o sistema tente ler memórias inexistentes.
+* **Linguagem:** C (Padrão C99/C11).
+* **Robustez:** Implementação de `limpar_buffer()` para estabilidade contra entradas inválidas.
+* **Persistência:** Uso de ponteiros de ponteiros para garantir que as alterações sejam refletidas em todos os módulos.
+
+---
+
+## 👥 Autores (Equipe de Engenharia)
+
+Este projeto foi desenvolvido pelos acadêmicos de Engenharia de Computação:
+
+* **DIEGO CARVALHO CAVALCANTE**
+* **JOÃO FELIPE TUNES OLIVEIRA**
+* **MIZAEL PARIS LEITE**
+* **EVANDRO JOSÉ DOS SANTOS NETO**
+* **KELVIN FAGUNDES GOMES DE SOUZA**
+* **MATEUS ALVES DE ALMEIDA RODRIGUES DANTAS**
+
+---
+*Este software é um projeto integrador desenvolvido para a disciplina de Estrutura de Dados.*
